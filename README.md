@@ -2,7 +2,7 @@
 
 ## Task Description
 
-This project is based on the KDD Cup 2017, one of the most famous competitions in data mining area. We select the first task:  *To estimate the average travel time from designated intersections to tollgates*.
+This project is based on the KDD Cup 2017, one of the most famous competitions in data mining area. The more details can be accessed through [KDD web](https://www.kdd.org/kdd2017/announcements/view/announcing-kdd-cup-2017-highway-tollgates-traffic-flow-prediction) and [Alibaba announcement](https://tianchi.aliyun.com/competition/entrance/231597/information). We select the first task:  *To estimate the average travel time from designated intersections to tollgates*.
 
 ## Dataset
 
