@@ -64,7 +64,7 @@ class LGBM:
     def predict(self, data):
         
         data = data.iloc[:,1:]
-        return self.best_model_(data)
+        return self.best_model_.predict(data)
       
 
 # Random Forest Regression Model
@@ -104,7 +104,7 @@ class RandomForestRegression:
        
     def predict(self, data):
         data = data.iloc[:,1:]
-        return self.best_model_(data)
+        return self.best_model_.predict(data)
 
 # BiLinearBlock in ResNet
 class BiLinearBlock(torch.nn.Module):

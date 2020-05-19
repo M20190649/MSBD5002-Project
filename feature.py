@@ -28,13 +28,14 @@ def load():
     # Process route
     dataset_train, dataset_test = process_route(dataset_train, dataset_route), \
                                   process_route(dataset_test, dataset_route)
+    
 
     # Append
     split = len(dataset_train)
     dataset = pd.concat([dataset_train, dataset_test], ignore_index=True)
     
     # Remove National Day (10-1 ~ 10-7)
-    dataset = dataset[(dataset.date < '2016-10-01') | (dataset.date > '2016-10-07')]
+    # dataset = dataset[(dataset.date < '2016-10-01') | (dataset.date > '2016-10-07')]
 
     # One-hot
     dataset = pd.get_dummies(dataset, columns=['intersection_id', 'tollgate_id', 'interval', 'weekday'])

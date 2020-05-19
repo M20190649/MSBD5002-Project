@@ -57,3 +57,8 @@ def compute_MAPE(X, y, y_pred):
     MAPE = groups["ratio"].sum() / groups.shape[0]
 
     return MAPE
+
+def get_submission(name, pred_time):
+    dataset_test = pd.read_csv("data/phase1_test/20min_avg_travel_time_test_phase1.csv")
+    dataset_test["avg_travel_time"] = pred_time
+    dataset_test.to_csv(name, index=False)
