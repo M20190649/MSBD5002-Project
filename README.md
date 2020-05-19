@@ -6,7 +6,7 @@ This project is based on the KDD Cup 2017, one of the most famous competitions i
 
 ## Dataset
 
-The whole dataset can be downloaded via the [link](https://wiki-1252789527.cos.ap-shanghai.myqcloud.com/article/MSBD5002-Project/data.zip). Except for training and test data, you are provided with a list of extra data sources:
+The whole dataset can be downloaded via the [link](https://file-1252789527.cos.ap-shenzhen-fsi.myqcloud.com/MSBD5002-Project/data.zip). Except for training and test data, you are provided with a list of extra data sources:
 
 * The road network topology
 * Vehicle trajectories
