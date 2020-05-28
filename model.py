@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestRegressor
 # LightGBM Model
 class LGBM:
     def __init__(self, 
-                 lr=1e-2, 
+                 lr=5e-2, 
                  boosting_type='gbdt', 
                  obj='regression', 
                  metric='rmse', 
@@ -113,14 +113,17 @@ class BiLinearBlock(torch.nn.Module):
         
         super(BiLinearBlock, self).__init__()
         
+        # An input layer
         self.input = torch.nn.Sequential(
             torch.nn.Linear(D_in, H)
         ).to(device)
         
+        # The ouput layer
         self.output = torch.nn.Sequential(
             torch.nn.Linear(H, D_out)
         ).to(device)
         
+        # The bilinear layer
         self.bilinear = torch.nn.Sequential(
             torch.nn.Linear(H, H),
             torch.nn.ReLU(),
@@ -132,14 +135,21 @@ class BiLinearBlock(torch.nn.Module):
             torch.nn.Dropout(0.25)
         ).to(device)
         
+        # An shorcut in the block
         self.shortcut = torch.nn.Sequential()
 
     def forward(self, x):
         x = self.input(x)
+        
+        # Bilinear + shortcut
         out = self.bilinear(x)
         out += self.shortcut(x)
+        
+        # Bilinear + shortcut
         out2 = self.bilinear(out)
         out2 += self.shortcut(out)
+        
+        # Output
         out3 = self.output(out2)
         return out3
 
@@ -160,15 +170,23 @@ class NN:
         y = pd.DataFrame(y.cpu().numpy())
         y_pred = pd.DataFrame(y_pred.cpu().detach().numpy())
         df = pd.concat([X, y, y_pred], axis=1, ignore_index=True)
+        
+        # The index of 121 represents the true label -> avg_travel_time
+        # The index of 121 represents the predicted travel_time
         df["ratio"] = ((df[121] - df[122]) / df[121]).abs()
+        
+        # The index of 37, 38, 39, 40, 41, 42 represent the one-hot encoding of intersactions and tollgates
         groups = df.groupby([37, 38, 39, 40, 41, 42]).mean()
         MAPE = groups["ratio"].sum() / groups.shape[0]
+        
         return MAPE
 
     def train(self, data, val_proportion=0.2):
         
+        # Split validation
         X_train, y_train, X_val, y_val = utils.split_val(data, val_proportion)
- 
+        
+        # Transfer dataframe to cuda() type
         X_train = torch.from_numpy(X_train.to_numpy().astype(np.float32)).cuda()
         y_train = torch.from_numpy(y_train.to_numpy().astype(np.float32)).cuda()
         X_val = torch.from_numpy(X_val.to_numpy().astype(np.float32)).cuda()
@@ -184,7 +202,7 @@ class NN:
         # Loss function
         loss_fn = torch.nn.MSELoss(reduction='mean')      
 
-        # SGD optimizer
+        # Adam optimizer
         optimizer = torch.optim.Adam(model.parameters(), lr=self.lr)
 
         for t in range(self.iteration):
@@ -260,15 +278,22 @@ class FNN:
         y = pd.DataFrame(y.cpu().numpy())
         y_pred = pd.DataFrame(y_pred.cpu().detach().numpy())
         df = pd.concat([X, y, y_pred], axis=1, ignore_index=True)
+        
+        # The index of 121 represents the true label -> avg_travel_time
+        # The index of 121 represents the predicted travel_time
         df["ratio"] = ((df[121] - df[122]) / df[121]).abs()
+        
+        # The index of 37, 38, 39, 40, 41, 42 represent the one-hot encoding of intersactions and tollgates
         groups = df.groupby([37, 38, 39, 40, 41, 42]).mean()
         MAPE = groups["ratio"].sum() / groups.shape[0]
         return MAPE
 
     def train(self, data, val_proportion=0.2):
         
+        # Split validation
         X_train, y_train, X_val, y_val = utils.split_val(data, val_proportion)
  
+        # Transfer dataframe to cuda() type
         X_train = torch.from_numpy(X_train.to_numpy().astype(np.float32)).cuda()
         y_train = torch.from_numpy(y_train.to_numpy().astype(np.float32)).cuda()
         X_val = torch.from_numpy(X_val.to_numpy().astype(np.float32)).cuda()
@@ -290,7 +315,7 @@ class FNN:
         # Loss function
         loss_fn = torch.nn.MSELoss(reduction='mean')      
 
-        # SGD optimizer
+        # Adam optimizer
         optimizer = torch.optim.Adam(model.parameters(), lr=self.lr)
 
         for t in range(self.iteration):

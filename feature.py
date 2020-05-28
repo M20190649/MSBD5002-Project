@@ -10,7 +10,7 @@ pd.set_option('display.width', 1000)
 
 def load():
     dataset_train = pd.read_csv("data/phase1_training/20min_avg_travel_time_training_phase1.csv")
-    dataset_test = pd.read_csv("data/phase1_test/20min_avg_travel_time_test_phase1.csv")
+    dataset_test = pd.read_csv("data/submission_sample/submission_sample_travelTime.csv")
 
     # Process date
     dataset_train, dataset_test = process_time_window(dataset_train), process_time_window(dataset_test)
